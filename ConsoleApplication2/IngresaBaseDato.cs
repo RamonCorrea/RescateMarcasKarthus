@@ -12,6 +12,12 @@ namespace ConsoleApplication2
         private string nombreArchivo;
         private int MarcaProcesadas = 0;
         ComponeCadena cadenaBBDD;
+        ManejoArchivo archivo = new ManejoArchivo();
+        string ServiBBDD; 
+        string BD;
+        string USER;
+        string PASSW;
+
         public IngresaBaseDato(string archivo)
         {
             nombreArchivo = archivo;
@@ -23,6 +29,8 @@ namespace ConsoleApplication2
         {
             StreamReader fichero = File.OpenText(nombreArchivo);
             string linea;
+            string ArchivoProcesado = "Procesado"+nombreArchivo;
+            int LargoT = Convert.ToInt32(archivo.Datos[0].ToString());
             
             try
             {
@@ -32,12 +40,13 @@ namespace ConsoleApplication2
                     if (linea == "" || linea == null)
                     {
                         Console.WriteLine("Se procesaron {0} Marcas.", MarcaProcesadas);
+                        File.Move(nombreArchivo, ArchivoProcesado);
                         fichero.Close();
                         break;    
                     }
                     else
                     {
-                        cadenaBBDD = new ComponeCadena(linea);
+                        cadenaBBDD = new ComponeCadena(linea,LargoT);
                         string Resul = ConexioSQL(cadenaBBDD.DevuelveCodTarjeta(), cadenaBBDD.DevuelveFecha(), cadenaBBDD.DevuelveHora(), cadenaBBDD.DevuelveIP(), cadenaBBDD.DevuelveEvento(), cadenaBBDD.DevuelveFechaHora());
                         Console.WriteLine(Resul);
                         MarcaProcesadas += 1;
@@ -55,11 +64,15 @@ namespace ConsoleApplication2
         public string ConexioSQL(string nroTarjeta, string FechaMarca, string HoraMarca, string codLector, string evento, string FechaHora)
         {
             SqlConnection cone;
+            ServiBBDD = archivo.Datos[4].ToString();
+            BD = archivo.Datos[5].ToString();
+            USER = archivo.Datos[6].ToString();
+            PASSW = archivo.Datos[7].ToString();
 
             try
             {
                 string Resultado;
-                string cadena = (@"data source = RCORREA; initial catalog = BD_STANDAR_LOGAM; user id = LOGAM; password = LOGAMM");
+                string cadena = (@"data source =" + ServiBBDD + "; initial catalog =" + BD + "; user id =" + USER + "; password =" + PASSW + "");
                 cone = new SqlConnection(cadena);
                 SqlCommand ProcedureStore = new SqlCommand();
 
@@ -68,7 +81,7 @@ namespace ConsoleApplication2
 
                 ProcedureStore.Connection = cone;
                 ProcedureStore.CommandType = CommandType.StoredProcedure;
-                ProcedureStore.CommandText = "Proc_Controles_Generales_JAX";
+                ProcedureStore.CommandText = "Proc_JAX_Controles_Generales";
                 ProcedureStore.CommandTimeout = 10;
 
                 ProcedureStore.Parameters.Add(new SqlParameter("@Nro_Tarjeta", SqlDbType.Char));

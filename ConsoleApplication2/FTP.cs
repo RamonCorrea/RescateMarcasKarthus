@@ -22,7 +22,7 @@ namespace ConsoleApplication2
             this.Password = pass;
         }
 
-        public void DescargaArchivo(string ArchivoFTP, string ArchivoLocal)
+        public string DescargaArchivo(string ArchivoFTP, string ArchivoLocal)
         {
             try
             {
@@ -52,13 +52,13 @@ namespace ConsoleApplication2
                 ftpStream.Close();
                 ftpResponse.Close();
                 ftpRequest = null;
+                return "Exito";
             }
             catch (Exception)
             {
                 Console.WriteLine("No se encuentra el archivo para descargar");
+                return "Error";
             }
-
-            return;
         }
 
         public void EliminarArchivo(string ArchivoEliminar)

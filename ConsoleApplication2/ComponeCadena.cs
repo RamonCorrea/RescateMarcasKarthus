@@ -8,8 +8,9 @@ namespace ConsoleApplication2
     {
         private string[] cadenaDividida;
         private string cadenaCompleta;
+        private int LargoTarjeta;
 
-        public ComponeCadena(string cadena)
+        public ComponeCadena(string cadena, int Tarjeta)
         {
             if (cadena == "" || cadena == null)
             {
@@ -20,14 +21,16 @@ namespace ConsoleApplication2
                 cadenaCompleta = cadena;
                 cadenaDividida = cadenaCompleta.Split(',');
             }
-        }
 
+           LargoTarjeta = (21 - Tarjeta) - 1;
+        }
+        
         /* ESTA FUNCION SE LE DEBE ESPECIFICAR EL LARGO DE CODIGO DEL TRABAJADOR */
         public string DevuelveCodTarjeta()
         {
             string cadena = cadenaDividida[0];
-            string CodTarjeta = cadena.Remove(21);
-            CodTarjeta = CodTarjeta.Remove(0, 8);
+            string CodTarjeta = cadena.Remove(20);
+            CodTarjeta = CodTarjeta.Remove(0, LargoTarjeta);
             return CodTarjeta;
         }
 
@@ -53,11 +56,9 @@ namespace ConsoleApplication2
         /* METODO EL CUAL PERMITE OBTENER EL EVENTO ENVIADO DESDE EL CLIENTE */
         public string DevuelveEvento()
         {
-
             string cadena = cadenaDividida[0];
             string evento = cadena.Remove(0, 34);
             return evento;
-      
         }
 
         /* METODOD EL CUAL PERMITE OBTENER LA FECHA Y LA HORA ENVIADA DESDE EL CLIENTE */

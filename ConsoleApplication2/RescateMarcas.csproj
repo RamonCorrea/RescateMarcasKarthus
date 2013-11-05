@@ -37,6 +37,7 @@
     <Compile Include="FTP.cs" />
     <Compile Include="IngresaBaseDato.cs" />
     <Compile Include="AppRescateMarcas.cs" />
+    <Compile Include="ManejoArchivo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
